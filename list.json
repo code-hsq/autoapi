@@ -1,0 +1,34 @@
+[
+  {
+    "path": "/user",
+    "list": [
+      {
+        "path": "/user",
+        "list": [
+          { "path": "/user", "method": "POST" },
+          {
+            "path": "/user",
+            "method": "GET",
+            "query": ["pageNumber", "pageSize"]
+          }
+        ]
+      },
+      {
+        "path": "/user/{id}",
+        "list": [
+          { "path": "/user/{id}", "method": "GET", "pathParams": ["id"] },
+          { "path": "/user/{id}", "method": "PATCH", "pathParams": ["id"] },
+          { "path": "/user/{id}", "method": "DELETE", "pathParams": ["id"] }
+        ]
+      },
+      {
+        "path": "/user/test",
+        "list": [{ "path": "/user/test", "method": "POST" }]
+      },
+      {
+        "path": "/user/login",
+        "list": [{ "path": "/user/login", "method": "POST" }]
+      }
+    ]
+  }
+]
