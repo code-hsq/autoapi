@@ -1,22 +1,34 @@
 import axios from 'axios';
 import { transformFromAstSync } from '@babel/core';
 import parser from '@babel/parser';
-// const autoPlugin = require('./plugin/auto-document-plugin');
 import fs from 'fs';
-import autoPlugin from './autoPlugin.js';
+import apiToJsPlugin from './apiToJsPlugin.js';
+import jsonToApiPlugin from './jsonToApiPlugin.js';
+
+const srcApiPath = './src/api/';
 axios.get('http://localhost:3000/api/swagger-ui-init.js').then(async (res) => {
-  //   console.log(typeof res.data);
   const ast = parser.parse(res.data, {
     sourceType: 'unambiguous',
   });
 
   const { code } = transformFromAstSync(ast, res.data, {
-    plugins: [[autoPlugin]],
+    plugins: [[apiToJsPlugin]],
   });
   fs.writeFileSync('./code.js', code);
   const data = await import('./code.js');
   const list = transformSwaggerToCustomFormat(data.default.swaggerDoc);
-  fs.writeFileSync('./list.json', JSON.stringify(list));
+
+  list.forEach((item) => {
+    const sourceCode = '';
+    const ast = parser.parse(sourceCode, {
+      sourceType: 'unambiguous',
+    });
+
+    const { code } = transformFromAstSync(ast, sourceCode, {
+      plugins: [[jsonToApiPlugin, { data: item.list }]],
+    });
+    fs.writeFileSync(`${srcApiPath}${item.path.replace('/', '')}.js`, code);
+  });
 });
 
 function transformSwaggerToCustomFormat(swaggerDoc) {

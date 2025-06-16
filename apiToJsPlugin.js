@@ -11,7 +11,6 @@ const autoPlugin = declare((api, options, dirname) => {
           path.traverse({
             VariableDeclarator(path) {
               if (path.node.id.name == 'options') {
-                // console.log(path.node);
                 state.neeNode = path.parentPath.node;
               }
             },
